@@ -36,13 +36,33 @@ $ npm install
 
 ```bash
 # development
-$ npm run start
+$ yarn start
 
 # watch mode
-$ npm run start:dev
+$ yarn start:dev
 
 # production mode
-$ npm run start:prod
+$ yarn start:prod
+```
+
+## Running docker
+
+```bash
+# development
+$ docker compose up dev-db -d
+
+# logging
+$ docker ps
+$ docker logs [ID_HERE]
+
+```
+
+## Prisma
+
+```bash
+# development migration
+$ npx prisma migrate dev
+
 ```
 
 ## Test

@@ -63,6 +63,9 @@ $ docker logs [ID_HERE]
 # development migration
 $ npx prisma migrate dev
 
+# inspect database
+$ npx prisma studio
+
 ```
 
 ## Test

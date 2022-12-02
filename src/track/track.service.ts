@@ -14,7 +14,7 @@ export class TrackService {
     private config: ConfigService,
   ) {}
 
-  async postIsrc(dto) {
+  async postIsrc(dto: IsrcDto) {
     const { isrc } = dto;
 
     const tracksItems = [];

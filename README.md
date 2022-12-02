@@ -46,6 +46,7 @@ $ yarn start:prod
 ```
 
 [Swagger](http://localhost:3000/api)
+[Spotify OAuth](http://localhost:3000/auth/spotify)
 
 ## Running docker
 

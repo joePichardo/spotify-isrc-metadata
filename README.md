@@ -45,6 +45,8 @@ $ yarn start:dev
 $ yarn start:prod
 ```
 
+[Swagger](http://localhost:3000/api)
+
 ## Running docker
 
 ```bash

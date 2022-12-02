@@ -5,3 +5,9 @@ export class IsrcDto {
   @IsNotEmpty()
   isrc: string;
 }
+
+export class ArtistDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}

@@ -6,6 +6,7 @@ import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Profile } from 'passport-spotify';
 
 @Injectable({})
 export class AuthService {
@@ -61,6 +62,48 @@ export class AuthService {
 
     // send back the user
     return this.signToken(user.id, user.email);
+  }
+
+  async spotifyLogin(req, res) {
+    const {
+      user,
+      authInfo,
+    }: {
+      user: Profile;
+      authInfo: {
+        accessToken: string;
+        refreshToken: string;
+        expires_in: number;
+      };
+    } = req;
+
+    if (!user) {
+      res.redirect('/');
+      return;
+    }
+
+    req.user = undefined;
+
+    const jwt = this.spotifyJwt(user);
+
+    res.set('authorization', `Bearer ${jwt}`);
+    console.log(authInfo.accessToken);
+
+    return res.status(201).json({ authInfo, user });
+  }
+
+  spotifyJwt(user: Profile) {
+    const payload = {
+      name: user.username,
+      sub: user.id,
+    };
+
+    const secret = this.config.get('JWT_SECRET');
+
+    return this.jwt.sign(payload, {
+      expiresIn: '15m',
+      secret,
+    });
   }
 
   async signToken(

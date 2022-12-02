@@ -61,6 +61,21 @@ export class TrackService {
     }
   }
 
+  async getIsrc(dto: IsrcDto) {
+    const { isrc } = dto;
+
+    // find the track by isrc
+    const track = await this.prisma.track.findUnique({
+      where: {
+        isrc: dto.isrc,
+      },
+    });
+    // if user does not exist throw exception
+    if (!track) throw new ForbiddenException('ISRC/Track not found');
+
+    return track;
+  }
+
   async fetchTracks(url: string) {
     return await fetch(url, {
       method: 'GET',

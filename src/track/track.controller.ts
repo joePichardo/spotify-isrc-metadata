@@ -28,4 +28,9 @@ export class TrackController {
   async postIsrc(@Body() dto: IsrcDto) {
     return await this.trackService.postIsrc(dto);
   }
+
+  @Get('isrc')
+  async getIsrc(@Body() dto: IsrcDto) {
+    return await this.trackService.getIsrc(dto);
+  }
 }

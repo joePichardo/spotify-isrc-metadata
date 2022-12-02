@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtGuard } from 'src/auth/guard';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TrackService } from './track.service';
-import { IsrcDto } from './dto';
+import { ArtistDto, IsrcDto } from './dto';
 
 @UseGuards(JwtGuard)
 @Controller('tracks')
@@ -32,5 +32,10 @@ export class TrackController {
   @Get('isrc')
   async getIsrc(@Body() dto: IsrcDto) {
     return await this.trackService.getIsrc(dto);
+  }
+
+  @Get('artist')
+  async getArtist(@Body() dto: ArtistDto) {
+    return await this.trackService.getArtist(dto);
   }
 }

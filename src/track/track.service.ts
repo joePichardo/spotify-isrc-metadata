@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import { IsrcDto } from './dto';
+import { ArtistDto, IsrcDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
@@ -72,6 +72,30 @@ export class TrackService {
     if (!track) throw new ForbiddenException('ISRC/Track not found');
 
     return track;
+  }
+
+  async getArtist(dto: ArtistDto) {
+    // find the artist by name
+    const artist = await this.prisma.artist.findUnique({
+      where: {
+        name: dto.name,
+      },
+    });
+    console.log(artist);
+    // if artist does not exist throw exception
+    if (!artist) throw new ForbiddenException('Artist not found');
+
+    // find tracks and artists
+    const getTracksAndArtists = await this.prisma.track.findMany({
+      include: {
+        artists: true,
+      },
+    });
+
+    // if tracks and artists does not exist throw exception
+    if (!artist) throw new ForbiddenException('Tracks for artist not found');
+
+    return getTracksAndArtists;
   }
 
   async fetchTracks(url: string) {

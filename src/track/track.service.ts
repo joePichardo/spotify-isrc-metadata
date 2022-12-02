@@ -32,7 +32,7 @@ export class TrackService {
       currentTracks = await this.fetchTracks(currentTracks.next);
       tracksItems.push(...currentTracks.items);
     }
-    if (!tracksItems)
+    if (tracksItems.length === 0)
       throw new HttpException('No tracks found', HttpStatus.BAD_REQUEST);
     const popularTrack = tracksItems.reduce((a, b) =>
       a.popularity > b.popularity ? a : b,

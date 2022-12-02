@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -27,6 +32,8 @@ export class TrackService {
       currentTracks = await this.fetchTracks(currentTracks.next);
       tracksItems.push(...currentTracks.items);
     }
+    if (!tracksItems)
+      throw new HttpException('No tracks found', HttpStatus.BAD_REQUEST);
     const popularTrack = tracksItems.reduce((a, b) =>
       a.popularity > b.popularity ? a : b,
     );
@@ -69,7 +76,8 @@ export class TrackService {
       },
     });
     // if user does not exist throw exception
-    if (!track) throw new ForbiddenException('ISRC/Track not found');
+    if (!track)
+      throw new HttpException('ISRC/Track not found', HttpStatus.NOT_FOUND);
 
     return track;
   }
@@ -83,7 +91,8 @@ export class TrackService {
     });
     console.log(artist);
     // if artist does not exist throw exception
-    if (!artist) throw new ForbiddenException('Artist not found');
+    if (!artist)
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
 
     // find tracks and artists
     const getTracksAndArtists = await this.prisma.track.findMany({
@@ -93,7 +102,11 @@ export class TrackService {
     });
 
     // if tracks and artists does not exist throw exception
-    if (!artist) throw new ForbiddenException('Tracks for artist not found');
+    if (!artist)
+      throw new HttpException(
+        'Tracks for artist not found',
+        HttpStatus.NOT_FOUND,
+      );
 
     return getTracksAndArtists;
   }

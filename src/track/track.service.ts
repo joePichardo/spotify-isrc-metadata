@@ -62,8 +62,6 @@ export class TrackService {
   }
 
   async getIsrc(dto: IsrcDto) {
-    const { isrc } = dto;
-
     // find the track by isrc
     const track = await this.prisma.track.findUnique({
       where: {

@@ -51,7 +51,15 @@ export class TrackService {
           isrc,
           title,
           imageUri,
-          artists: { create: artists },
+          artists: {
+            connectOrCreate: {
+              where: artists[0],
+              create: artists[0],
+            },
+          },
+        },
+        include: {
+          artists: true,
         },
       });
 
@@ -89,15 +97,20 @@ export class TrackService {
         name: dto.name,
       },
     });
-    console.log(artist);
     // if artist does not exist throw exception
     if (!artist)
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
 
     // find tracks and artists
     const getTracksAndArtists = await this.prisma.track.findMany({
-      include: {
-        artists: true,
+      where: {
+        artists: {
+          every: {
+            name: {
+              contains: dto.name,
+            },
+          },
+        },
       },
     });
 

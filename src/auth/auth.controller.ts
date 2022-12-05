@@ -19,14 +19,12 @@ import { Request, Response } from 'express';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(SpotifyOauthGuard)
   @Post('signup')
   @ApiOperation({ summary: 'Create user' })
   async signup(@Body() dto: AuthDto) {
     return await this.authService.signup(dto);
   }
 
-  @UseGuards(SpotifyOauthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   @ApiOperation({ summary: 'Sign in user' })

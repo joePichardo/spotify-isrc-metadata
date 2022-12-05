@@ -34,12 +34,14 @@ export class AuthController {
 
   @UseGuards(SpotifyOauthGuard)
   @Get('spotify')
+  @ApiOperation({ summary: 'Spotify OAuth' })
   spotifyAuth(@Req() req: Request, @Res() res: Response) {
     return;
   }
 
   @UseGuards(SpotifyOauthGuard)
   @Get('spotify-redirect')
+  @ApiOperation({ summary: 'Spotify OAuth Redirect' })
   spotifyAuthRedirect(@Req() req: Request, @Res() res: Response) {
     return this.authService.spotifyLogin(req, res);
   }

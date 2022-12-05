@@ -90,7 +90,7 @@ Once app is setup, go to:
 
 Use POST route `http://localhost:3000/auth/signup` to send email and password. Save returned `access_token` for other routes. You can get the `access_token` again through the POST `http://localhost:3000/auth/signin` route with email and password. 
 
-To get the Spotify OAuth Token go to route `http://localhost:3000/auth/spotify` to take you through the oauth steps.
+To get the Spotify OAuth Token go to route `http://localhost:3000/auth/spotify` on a browser to take you through the oauth steps.
 
 Use `access_token` as a `Bearer token` for other routes. To input ISRC metadata to the app use the POST  `http://localhost:3000/tracks/isrc` with `isrc` value. You can get the ISRC value with the GET route `http://localhost:3000/tracks/isrc` with `isrc` value. You can get the artists data with the GET route `http://localhost:3000/tracks/artist` with `name` value of the artist name.
 

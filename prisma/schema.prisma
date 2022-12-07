@@ -16,10 +16,13 @@ model User {
   updatedAt DateTime @updatedAt
 
   email String @unique
-  hash String
+  hash String?
 
   firstName String?
   lastName String?
+
+  spotifyAuthToken String?
+  spotifyRefreshToken String?
 
   @@map("users")
 }

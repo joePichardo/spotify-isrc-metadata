@@ -14,7 +14,7 @@ export class SpotifyOauthStrategy extends PassportStrategy(
         clientID: config.get('SPOTIFY_CLIENT_ID'),
         clientSecret: config.get('SPOTIFY_CLIENT_SECRET'),
         callbackURL: config.get('SPOTIFY_CALLBACK_URL'),
-        // scope: config.get('SPOTIFY_SCOPE'),
+        scope: config.get('SPOTIFY_SCOPE'),
       },
       (
         accessToken: string,

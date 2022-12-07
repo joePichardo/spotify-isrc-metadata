@@ -82,19 +82,48 @@ export class AuthService {
       return;
     }
 
+    let currentUser;
+    // find the user by email
+    const foundUser = await this.prisma.user.findUnique({
+      where: {
+        email: user._json.email,
+      },
+    });
+
+    // if user does not exist create user
+    if (!foundUser) {
+      const newUser = await this.prisma.user.create({
+        data: {
+          email: user._json.email,
+        },
+      });
+      currentUser = newUser;
+    } else {
+      currentUser = foundUser;
+    }
+
     req.user = undefined;
 
-    const jwt = this.spotifyJwt(user);
+    await this.prisma.user.update({
+      where: {
+        email: user._json.email,
+      },
+      data: {
+        spotifyAuthToken: authInfo.accessToken,
+        spotifyRefreshToken: authInfo.refreshToken,
+      },
+    });
+
+    const jwt = await this.signToken(currentUser.id, currentUser.email);
 
     res.set('authorization', `Bearer ${jwt}`);
-    console.log(authInfo.accessToken);
 
-    return res.status(201).json({ authInfo, user });
+    return res.status(201).json({ jwt, authInfo, user });
   }
 
   spotifyJwt(user: Profile) {
     const payload = {
-      name: user.username,
+      name: user._json.email,
       sub: user.id,
     };
 

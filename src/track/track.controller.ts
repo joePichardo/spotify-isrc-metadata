@@ -13,6 +13,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { TrackService } from './track.service';
 import { ArtistDto, IsrcDto } from './dto';
 import { ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { User } from '.prisma/client';
+import { GetUser } from '../auth/decorator';
 
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
@@ -28,8 +30,8 @@ export class TrackController {
 
   @ApiOperation({ summary: 'Create isrc and save metadata' })
   @Post('isrc')
-  async postIsrc(@Body() dto: IsrcDto) {
-    return await this.trackService.postIsrc(dto);
+  async postIsrc(@Body() dto: IsrcDto, @GetUser() user: User) {
+    return await this.trackService.postIsrc(dto, user);
   }
 
   @ApiOperation({ summary: 'Get isrc/track' })

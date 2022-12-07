@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { ArtistDto, IsrcDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { User } from '.prisma/client';
 
 @Injectable({})
 export class TrackService {
@@ -19,17 +20,21 @@ export class TrackService {
     private config: ConfigService,
   ) {}
 
-  async postIsrc(dto: IsrcDto) {
+  async postIsrc(dto: IsrcDto, user: User) {
     const { isrc } = dto;
 
     const tracksItems = [];
     let currentTracks = await this.fetchTracks(
       `https://api.spotify.com/v1/search?q=isrc:${isrc}&type=track&limit=1`,
+      user.spotifyAuthToken,
     );
     tracksItems.push(...currentTracks.items);
 
     while (currentTracks.next) {
-      currentTracks = await this.fetchTracks(currentTracks.next);
+      currentTracks = await this.fetchTracks(
+        currentTracks.next,
+        user.spotifyAuthToken,
+      );
       tracksItems.push(...currentTracks.items);
     }
     if (tracksItems.length === 0)
@@ -124,11 +129,11 @@ export class TrackService {
     return getTracksAndArtists;
   }
 
-  async fetchTracks(url: string) {
+  async fetchTracks(url: string, token: string) {
     return await fetch(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${this.config.get('SPOTIFY_TOKEN')}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => response.json())

@@ -34,6 +34,8 @@ $ npm install
 
 ## Running the app
 
+Make sure to copy `.env.sample` to `.env` and add environment variables
+
 ```bash
 # development
 $ yarn start
